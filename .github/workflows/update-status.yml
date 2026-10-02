@@ -1,0 +1,45 @@
+# ดึงข้อมูลน้ำทุก 15 นาที แล้วอัปเดต docs/data/status.json
+# (GitHub อาจรันช้ากว่ากำหนดได้บ้างในช่วงคนใช้เยอะ — ปกติ)
+name: อัปเดตข้อมูลน้ำ
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}          # กดรันเองได้จากแท็บ Actions
+  push:
+    paths:
+      - "docs/data/manual.json"  # กรอกค่าพระนารายณ์แล้ว อัปเดตทันที
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-status
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: ดึงข้อมูลและสรุปสถานะ
+        run: python scripts/fetch_status.py
+
+      - name: บันทึกผล
+        run: |
+          git config user.name "water-bot"
+          git config user.email "water-bot@users.noreply.github.com"
+          git add docs/data/status.json
+          if git diff --staged --quiet; then
+            echo "ไม่มีข้อมูลใหม่"
+          else
+            git commit -m "อัปเดตข้อมูลน้ำ $(TZ=Asia/Bangkok date '+%Y-%m-%d %H:%M')"
+            git pull --rebase --autostash
+            git push
+          fi
