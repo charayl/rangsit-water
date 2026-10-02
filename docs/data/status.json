@@ -1,0 +1,336 @@
+{
+ "generated_at": "2026-10-02T09:00+07:00",
+ "position": 2,
+ "summary": {
+  "level": "orange",
+  "status_line": "คลองระพีพัฒน์ แยกใต้ ใกล้ตลิ่ง (ห่างตลิ่ง 0.36 ม.)",
+  "water_lines": [
+   "น้ำเหนือกำลังมาถึงเขื่อนพระรามหก",
+   "ประตูพระนารายณ์ยังปิด (ยังไม่ส่งน้ำเข้าทุ่งรังสิตทางนี้)",
+   "น้ำเหนือก้อนใหม่ออกจากเขื่อนป่าสักแล้ว · คาดถึงเขื่อนพระรามหกในราว 1–2 วัน"
+  ],
+  "notes": []
+ },
+ "stages": [
+  {
+   "n": 1,
+   "id": "pasak",
+   "name": "เขื่อนป่าสักชลสิทธิ์",
+   "kind": "dam",
+   "eta_next": "ราว 1–2 วัน",
+   "eta_note": "จากข้อมูลย้อนหลังปี 2563–2569",
+   "stations": [
+    {
+     "code": "S.28",
+     "label": "ท้ายเขื่อนป่าสักชลสิทธิ์",
+     "official_name": "ท้ายเขื่อนป่าสักชลสิทธิ์",
+     "wl": 22.6,
+     "bank": 31.46,
+     "to_bank": 8.86,
+     "pct": 46.0,
+     "q": 261.0,
+     "qmax": 1184.0,
+     "q_pct": 22,
+     "trend": "up",
+     "trend_m": 2.32,
+     "time": "2026-10-01T20:00+07:00",
+     "age_h": 13.0,
+     "stale": false,
+     "level": "green",
+     "source": "ThaiWater (สสน.)"
+    }
+   ],
+   "level": "green",
+   "rising": true,
+   "here": false
+  },
+  {
+   "n": 2,
+   "id": "rama6",
+   "name": "เขื่อนพระรามหก",
+   "kind": "dam",
+   "eta_next": null,
+   "eta_note": "ขึ้นกับการเปิดประตูพระนารายณ์",
+   "stations": [
+    {
+     "code": "S.26",
+     "label": "ท้ายเขื่อนพระรามหก",
+     "official_name": "ท้ายเขื่อนพระรามหก",
+     "wl": 6.53,
+     "bank": 7.2,
+     "to_bank": 0.67,
+     "pct": 94.4,
+     "q": 552.0,
+     "qmax": 633.0,
+     "q_pct": 87,
+     "trend": "up",
+     "trend_m": 0.18,
+     "time": "2026-10-02T07:00+07:00",
+     "age_h": 2.0,
+     "stale": false,
+     "level": "orange",
+     "source": "ThaiWater (สสน.)"
+    }
+   ],
+   "level": "orange",
+   "rising": true,
+   "here": true
+  },
+  {
+   "n": 3,
+   "id": "phranarai",
+   "name": "ประตูน้ำพระนารายณ์",
+   "kind": "gate",
+   "qmax": 210,
+   "eta_next": "ถ้าเปิด ราว 1–3 วัน",
+   "eta_note": "ค่าคร่าวๆ จากข้อมูลย้อนหลัง",
+   "gate": {
+    "q": 0.0,
+    "date": "2026-10-01",
+    "age_days": 1,
+    "stale": false,
+    "open": false,
+    "note": "ผังน้ำ ชป. 06:00 น."
+   },
+   "level": "info",
+   "rising": false,
+   "here": false
+  },
+  {
+   "n": 4,
+   "id": "raphiphat",
+   "name": "คลองระพีพัฒน์ (ขอบทุ่งรังสิต)",
+   "kind": "canal",
+   "in_field": true,
+   "stations": [
+    {
+     "code": "CAN001",
+     "label": "แยกตก (คลองหลวง)",
+     "official_name": "คลองระพีพัฒน์แยกตก",
+     "wl": 3.95,
+     "bank": 4.56,
+     "to_bank": 0.61,
+     "pct": 88.3,
+     "q": null,
+     "qmax": null,
+     "q_pct": null,
+     "trend": "down",
+     "trend_m": -0.14,
+     "time": "2026-10-02T08:40+07:00",
+     "age_h": 0.3,
+     "stale": false,
+     "level": "yellow",
+     "source": "ThaiWater (สสน.)"
+    },
+    {
+     "code": "BKK013",
+     "label": "แยกใต้ (หนองเสือ)",
+     "official_name": "คลองระพีพัฒน์แยกใต้ หนองเสือ",
+     "wl": 3.6,
+     "bank": 3.96,
+     "to_bank": 0.36,
+     "pct": 92.1,
+     "q": null,
+     "qmax": null,
+     "q_pct": null,
+     "trend": "steady",
+     "trend_m": -0.01,
+     "time": "2026-10-02T08:30+07:00",
+     "age_h": 0.5,
+     "stale": false,
+     "level": "orange",
+     "source": "ThaiWater (สสน.)"
+    }
+   ],
+   "level": "orange",
+   "rising": false,
+   "here": false
+  },
+  {
+   "n": 5,
+   "id": "rangsit",
+   "name": "คลองรังสิต",
+   "kind": "link",
+   "in_field": true,
+   "url": "https://cdp.rangsitcity.go.th/",
+   "link_label": "ดูกล้องและธงเตือน เทศบาลนครรังสิต",
+   "flags": [
+    [
+     "green",
+     "ปกติ"
+    ],
+    [
+     "yellow",
+     "เกิน 1.30 ม. เฝ้าระวัง"
+    ],
+    [
+     "orange",
+     "เริ่มอันตราย ยกของขึ้นที่สูง"
+    ],
+    [
+     "red",
+     "อันตรายสูงสุด อยู่ในที่ปลอดภัย"
+    ]
+   ],
+   "level": "link",
+   "rising": false,
+   "here": false
+  },
+  {
+   "n": 6,
+   "id": "hokwa",
+   "name": "คลองหกวา (ลำลูกกา)",
+   "kind": "canal",
+   "in_field": true,
+   "stations": [
+    {
+     "code": "BKK015",
+     "label": "คลอง 8 ลำลูกกา",
+     "official_name": "คลองหกวา ลำลูกกา คลอง8",
+     "wl": 1.67,
+     "bank": 2.71,
+     "to_bank": 1.04,
+     "pct": 80.0,
+     "q": null,
+     "qmax": null,
+     "q_pct": null,
+     "trend": "steady",
+     "trend_m": -0.01,
+     "time": "2026-10-02T08:40+07:00",
+     "age_h": 0.3,
+     "stale": false,
+     "level": "yellow",
+     "source": "ThaiWater (สสน.)"
+    },
+    {
+     "code": "BKK001",
+     "label": "ปลายคลอง 2 (ท้าย ปตร.คลอง 2)",
+     "official_name": "คลองลาดพร้าว ท้ายปตร.คลอง2",
+     "wl": 1.39,
+     "bank": 2.56,
+     "to_bank": 1.17,
+     "pct": 73.8,
+     "q": null,
+     "qmax": null,
+     "q_pct": null,
+     "trend": "steady",
+     "trend_m": -0.08,
+     "time": "2026-10-02T08:40+07:00",
+     "age_h": 0.3,
+     "stale": false,
+     "level": "yellow",
+     "source": "ThaiWater (สสน.)"
+    }
+   ],
+   "level": "yellow",
+   "rising": false,
+   "here": false
+  },
+  {
+   "n": 7,
+   "id": "samwa",
+   "name": "คลองสามวา",
+   "kind": "bma",
+   "in_field": true,
+   "bma_code": "FW.KSW.01",
+   "label": "ประตูระบายน้ำคลองสามวา",
+   "stale_h": 6,
+   "stations": [
+    {
+     "code": "FW.KSW.01",
+     "label": "ประตูระบายน้ำคลองสามวา",
+     "official_name": "ประตูระบายน้ำคลองสามวา",
+     "wl": 0.98,
+     "bank": null,
+     "to_bank": null,
+     "pct": null,
+     "q": 0.0,
+     "qmax": null,
+     "q_pct": null,
+     "trend": null,
+     "trend_m": null,
+     "time": "2026-10-01T22:35+07:00",
+     "age_h": 10.4,
+     "stale": true,
+     "level": "gray",
+     "source": "สำนักการระบายน้ำ กทม."
+    }
+   ],
+   "level": "gray",
+   "rising": false,
+   "here": false
+  }
+ ],
+ "extra": [
+  {
+   "code": "C.13",
+   "label": "ท้ายเขื่อนเจ้าพระยา (แม่น้ำเจ้าพระยา)",
+   "official_name": "ท้ายเขื่อนเจ้าพระยา",
+   "wl": 15.93,
+   "bank": 16.34,
+   "to_bank": 0.41,
+   "pct": 97.1,
+   "q": 2500.0,
+   "qmax": 2720.0,
+   "q_pct": 92,
+   "trend": "up",
+   "trend_m": 0.43,
+   "time": "2026-10-02T07:00+07:00",
+   "age_h": 2.0,
+   "stale": false,
+   "level": "orange",
+   "source": "ThaiWater (สสน.)",
+   "why": "ถ้าแม่น้ำเจ้าพระยาสูง น้ำในคลองรังสิตจะระบายออกได้ช้า"
+  }
+ ],
+ "rules": {
+  "colors": [
+   {
+    "level": "green",
+    "label": "ปกติ",
+    "range": "≤ 70% ของความจุลำน้ำ",
+    "source": "สสน."
+   },
+   {
+    "level": "yellow",
+    "label": "น้ำมาก",
+    "range": "70–90%",
+    "source": "สสน."
+   },
+   {
+    "level": "orange",
+    "label": "ใกล้ตลิ่ง",
+    "range": "90–100%",
+    "source": "เกณฑ์ของแอปนี้ (ไม่ใช่เกณฑ์ทางการ)"
+   },
+   {
+    "level": "red",
+    "label": "ล้นตลิ่ง",
+    "range": "> 100%",
+    "source": "สสน."
+   },
+   {
+    "level": "gray",
+    "label": "ไม่มีข้อมูลล่าสุด",
+    "range": "",
+    "source": ""
+   }
+  ],
+  "trend": "เทียบกับ 24 ชม. ก่อน · เปลี่ยนน้อยกว่า 10 ซม. = คงที่"
+ },
+ "sources": [
+  {
+   "name": "สถาบันสารสนเทศทรัพยากรน้ำ (สสน.) — ThaiWater",
+   "url": "https://www.thaiwater.net/"
+  },
+  {
+   "name": "สำนักการระบายน้ำ กรุงเทพมหานคร",
+   "url": "https://weather.bangkok.go.th/flow/"
+  },
+  {
+   "name": "กรมชลประทาน — ผังน้ำเจ้าพระยาตอนล่าง (ค่าประตูพระนารายณ์)",
+   "url": "https://water.rid.go.th/flood/plan_new/planlow.html"
+  }
+ ],
+ "errors": []
+}
