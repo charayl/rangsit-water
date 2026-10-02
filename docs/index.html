@@ -260,7 +260,7 @@
         ${g ? `<div class="row"><span>ปริมาณที่ส่ง</span><b>${fmt0(g.q)} ลบ.ม./วิ</b></div>
         <div class="row"><span>ข้อมูลวันที่</span><b>${esc(g.date)}${g.stale ? " (เก่าเกิน 2 วัน)" : ""}</b></div>` : ""}
         <div class="src">ที่มา: ผังน้ำเจ้าพระยาตอนล่าง กรมชลประทาน (อัปเดตวันละครั้ง 06:00 น.) · กรอกโดยผู้ดูแลระบบ</div>
-        <a href="${ridImageUrl()}" target="_blank" rel="noopener">ดูผังน้ำของกรมชลฯ วันนี้ ↗</a>
+        <a class="ridlink" href="${ridImageUrl(0)}" target="_blank" rel="noopener">ดูผังน้ำของกรมชลฯ ↗</a>
       </div>`;
     }
     if (s.kind === "link") {
@@ -322,15 +322,34 @@
       + `<div class="muted">${esc(d.rules.trend)} · แตะแต่ละด่านเพื่อดูตัวเลขและแหล่งข้อมูล</div>`;
     $("sources").innerHTML = d.sources.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join("");
     lastData = d;
+    probeRid();
     if ($("mapdlg").open) drawMap(d);
   }
 
   // ---------- แผนผังเส้นทางน้ำ (สไตล์แผนผังรถไฟฟ้า) ----------
   let lastData = null;
-  function ridImageUrl() {
-    const p = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Bangkok", day: "2-digit", month: "2-digit", year: "numeric" }).formatToParts(new Date());
+  // ผังน้ำรายวันของกรมชลฯ ตั้งชื่อตามวันที่ บางวันลงช้า → ลองวันนี้ ถ้ายังไม่มีใช้ของเมื่อวาน
+  function ridImageUrl(daysAgo) {
+    const p = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Bangkok", day: "2-digit", month: "2-digit", year: "numeric" }).formatToParts(new Date(Date.now() - daysAgo * 864e5));
     const g = (t) => p.find(x => x.type === t).value;
     return `https://water.rid.go.th/flood/plan_new/chaophaya/Chao_low${g("day")}${g("month")}${g("year")}.jpg`;
+  }
+  let ridFound = null;
+  function probeRid() {
+    const apply = () => document.querySelectorAll(".ridlink").forEach(a => {
+      if (!ridFound) return;
+      a.href = ridFound.url;
+      a.textContent = ridFound.days === 0 ? "ดูผังน้ำของกรมชลฯ วันนี้ ↗" : `ดูผังน้ำของกรมชลฯ ล่าสุด (${ridFound.days} วันก่อน — วันนี้ยังไม่ลง) ↗`;
+    });
+    if (ridFound) return apply();
+    const tryDay = (n) => {
+      if (n > 3) return;
+      const img = new Image();
+      img.onload = () => { ridFound = { url: ridImageUrl(n), days: n }; apply(); };
+      img.onerror = () => tryDay(n + 1);
+      img.src = ridImageUrl(n);
+    };
+    tryDay(0);
   }
   const DOT = { closed: "var(--muted)", green: "var(--green)", yellow: "var(--yellow-dot)", orange: "var(--orange-dot)", red: "var(--red)", gray: "var(--gray)", info: "var(--info)", link: "var(--info)" };
 
