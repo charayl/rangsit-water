@@ -119,6 +119,32 @@
   footer { color: var(--muted); font-size: .78rem; margin-top: 18px; display: grid; gap: 6px; }
   footer ul { margin: 0; padding-left: 18px; }
   .skeleton { color: var(--muted); padding: 30px 0; text-align: center; }
+
+  /* แผนผังเส้นทางน้ำ */
+  .mapbtn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; padding: 13px; border-radius: 14px; border: 1.5px solid var(--accent); background: var(--card); color: var(--accent); font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer; }
+  dialog#mapdlg { border: 0; padding: 0; width: 100vw; max-width: 560px; height: 100dvh; max-height: 100dvh; margin: 0 auto; background: var(--bg); color: var(--ink); }
+  dialog#mapdlg::backdrop { background: rgba(0,0,0,.5); }
+  .dlg-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .dlg-head h2 { margin: 0; }
+  .dlg-close { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+  .dlg-body { padding: 8px 12px 24px; }
+  .dlg-body svg { width: 100%; height: auto; display: block; }
+  .dlg-note { font-size: .8rem; color: var(--muted); margin: 6px 4px 0; display: grid; gap: 4px; }
+  .m-line { fill: none; stroke: var(--info); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  .m-line.thin { stroke-width: 4; }
+  .m-line.off { stroke: var(--rail); stroke-dasharray: 2 9; }
+  .m-exit { fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-dasharray: 6 5; }
+  .m-exit-head { fill: var(--muted); }
+  .m-node { stroke: var(--card); stroke-width: 3; }
+  .m-ring { fill: var(--card); stroke-width: 5; }
+  .m-t { font-size: 13px; font-weight: 600; fill: var(--ink); }
+  .m-s { font-size: 11px; fill: var(--muted); }
+  .m-x { font-size: 10.5px; fill: var(--muted); }
+  .m-here { animation: pulse2 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse2 { 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .m-here { animation: none; } }
+  .m-tag rect { fill: var(--ink); }
+  .m-tag text { fill: var(--bg); font-size: 11px; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -136,6 +162,12 @@
 
   <h2>น้ำอยู่ด่านไหน</h2>
   <ol class="track" id="track"></ol>
+
+  <button class="mapbtn" id="mapbtn" type="button">🗺️ ดูแผนผังเส้นทางน้ำ</button>
+  <dialog id="mapdlg" aria-labelledby="maptitle">
+    <div class="dlg-head"><h2 id="maptitle">แผนผังเส้นทางน้ำ</h2><button class="dlg-close" id="mapclose" type="button">ปิด ✕</button></div>
+    <div class="dlg-body"><div id="mapsvg"></div><div class="dlg-note" id="mapnote"></div></div>
+  </dialog>
 
   <div id="extra"></div>
 
@@ -228,6 +260,7 @@
         ${g ? `<div class="row"><span>ปริมาณที่ส่ง</span><b>${fmt0(g.q)} ลบ.ม./วิ</b></div>
         <div class="row"><span>ข้อมูลวันที่</span><b>${esc(g.date)}${g.stale ? " (เก่าเกิน 2 วัน)" : ""}</b></div>` : ""}
         <div class="src">ที่มา: ผังน้ำเจ้าพระยาตอนล่าง กรมชลประทาน (อัปเดตวันละครั้ง 06:00 น.) · กรอกโดยผู้ดูแลระบบ</div>
+        <a href="${ridImageUrl()}" target="_blank" rel="noopener">ดูผังน้ำของกรมชลฯ วันนี้ ↗</a>
       </div>`;
     }
     if (s.kind === "link") {
@@ -288,7 +321,102 @@
     $("legend").innerHTML = d.rules.colors.map(c => `<div>${chip(c.level, c.label)} <span>${esc(c.range)}</span> <span class="muted">${esc(c.source)}</span></div>`).join("")
       + `<div class="muted">${esc(d.rules.trend)} · แตะแต่ละด่านเพื่อดูตัวเลขและแหล่งข้อมูล</div>`;
     $("sources").innerHTML = d.sources.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join("");
+    lastData = d;
+    if ($("mapdlg").open) drawMap(d);
   }
+
+  // ---------- แผนผังเส้นทางน้ำ (สไตล์แผนผังรถไฟฟ้า) ----------
+  let lastData = null;
+  function ridImageUrl() {
+    const p = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Bangkok", day: "2-digit", month: "2-digit", year: "numeric" }).formatToParts(new Date());
+    const g = (t) => p.find(x => x.type === t).value;
+    return `https://water.rid.go.th/flood/plan_new/chaophaya/Chao_low${g("day")}${g("month")}${g("year")}.jpg`;
+  }
+  const DOT = { closed: "var(--muted)", green: "var(--green)", yellow: "var(--yellow-dot)", orange: "var(--orange-dot)", red: "var(--red)", gray: "var(--gray)", info: "var(--info)", link: "var(--info)" };
+
+  function drawMap(d) {
+    const st = Object.fromEntries(d.stages.map(s => [s.id, s]));
+    const station = (stage, code) => (st[stage]?.stations || []).find(x => x && x.code === code) || { level: "gray" };
+    const gate = st.phranarai, gOpen = !!gate?.gate?.open;
+    const here = d.stages.find(s => s.here);
+    const hereCodes = here ? (here.kind === "gate" ? ["GATE"] : (here.stations || []).filter(x => x && (x.trend === "up" || here.stations.length === 1)).map(x => x.code)) : [];
+
+    const node = (x, y, lv, code, opts = {}) => {
+      const isHere = hereCodes.includes(code);
+      const c = DOT[lv] || DOT.gray;
+      const shape = opts.square
+        ? `<rect x="${x - 11}" y="${y - 11}" width="22" height="22" rx="4" fill="${c}" class="m-node"/>`
+        : opts.ring
+          ? `<circle cx="${x}" cy="${y}" r="10" class="m-ring" stroke="${c}" stroke-dasharray="${opts.dash ? "4 3" : "0"}"/>`
+          : `<circle cx="${x}" cy="${y}" r="11" fill="${c}" class="m-node"/>`;
+      const halo = isHere ? `<circle cx="${x}" cy="${y}" r="19" fill="none" stroke="${c}" stroke-width="4" class="m-here"/>` : "";
+      return halo + shape;
+    };
+    const label = (x, y, t, s, anchor = "start") =>
+      `<text x="${x}" y="${y}" text-anchor="${anchor}" class="m-t">${esc(t)}</text>` + (s ? `<text x="${x}" y="${y + 15}" text-anchor="${anchor}" class="m-s">${esc(s)}</text>` : "");
+    const bank = (x) => x && x.to_bank != null ? (x.to_bank < 0 ? `เกินตลิ่ง ${fmt(-x.to_bank)} ม.` : `ห่างตลิ่ง ${fmt(x.to_bank)} ม.`) : "ไม่มีข้อมูลล่าสุด";
+    const exit = (x1, y1, x2, y2) => {
+      const a = Math.atan2(y2 - y1, x2 - x1), h = 8;
+      const p1 = [x2 - h * Math.cos(a - .5), y2 - h * Math.sin(a - .5)], p2 = [x2 - h * Math.cos(a + .5), y2 - h * Math.sin(a + .5)];
+      return `<path d="M${x1} ${y1} L${x2} ${y2}" class="m-exit"/><path d="M${x2} ${y2} L${p1} L${p2} Z" class="m-exit-head"/>`;
+    };
+
+    const s28 = station("pasak", "S.28"), s26 = station("rama6", "S.26");
+    const can = station("raphiphat", "CAN001"), bkk13 = station("raphiphat", "BKK013");
+    const b15 = station("hokwa", "BKK015"), b01 = station("hokwa", "BKK001");
+    const ksw = station("samwa", "FW.KSW.01");
+    const gateLv = !gate?.gate || gate.gate.stale ? "gray" : gOpen ? "info" : "closed";
+    const tagAt = (x, y) => `<g class="m-tag"><rect x="${x}" y="${y - 13}" width="86" height="19" rx="5"/><text x="${x + 43}" y="${y + 1}" text-anchor="middle">น้ำอยู่ตรงนี้</text></g>`;
+    const tagPos = { "S.28": [206, 70], "S.26": [206, 150], GATE: [206, 228], CAN001: [26, 318], BKK013: [248, 318] };
+    const tags = hereCodes.filter(c => tagPos[c]).map(c => tagAt(...tagPos[c])).join("");
+
+    const svg = `<svg viewBox="0 0 360 640" role="img" aria-label="แผนผังเส้นทางน้ำ ป่าสักถึงคลองสามวา">
+      <!-- เส้นหลัก -->
+      <path d="M180 40 V120" class="m-line"/>
+      <path d="M180 120 V196" class="m-line"/>
+      <path d="M180 208 C180 240 100 236 100 280" class="m-line ${gOpen ? "" : "off"}"/>
+      <path d="M180 208 C180 240 260 236 260 280" class="m-line ${gOpen ? "" : "off"}"/>
+      <path d="M100 290 V380 M260 290 V380" class="m-line thin"/>
+      <path d="M48 380 H312" class="m-line"/>
+      <path d="M112 380 V480 M232 380 V480" class="m-line thin"/>
+      <path d="M70 480 H300" class="m-line"/>
+      <path d="M232 480 V575" class="m-line"/>
+
+      <!-- ทางระบายออก -->
+      ${exit(180, 120, 70, 160)}<text x="16" y="182" class="m-x">ป่าสักต่อ → อยุธยา</text><text x="16" y="195" class="m-x">ลงแม่น้ำเจ้าพระยา</text>
+      ${exit(48, 380, 14, 412)}<text x="8" y="428" class="m-x">ปตร.จุฬาลงกรณ์</text><text x="8" y="441" class="m-x">→ เจ้าพระยา</text>
+      ${exit(312, 380, 346, 412)}<text x="352" y="428" text-anchor="end" class="m-x">ปตร.เสาวภาผ่องศรี</text><text x="352" y="441" text-anchor="end" class="m-x">→ นครนายก</text>
+
+      <!-- ป้ายเส้น -->
+      <text x="120" y="252" class="m-x" text-anchor="end">แยกตก</text><text x="240" y="252" class="m-x">แยกใต้</text>
+      <text x="118" y="436" class="m-x">คลองซอย</text><text x="118" y="449" class="m-x">ฝั่งใต้</text>
+
+      <!-- ด่าน -->
+      ${node(180, 40, s28.level, "S.28")}${label(206, 36, "① เขื่อนป่าสัก", s28.trend === "up" ? "ระดับน้ำกำลังขึ้น" : "")}
+      ${node(180, 120, s26.level, "S.26")}${label(206, 116, "② เขื่อนพระรามหก", bank(s26))}
+      ${node(180, 202, gateLv, "GATE", { square: true })}${label(206, 198, "③ ประตูพระนารายณ์", gate?.gate ? (gOpen ? `เปิด ${fmt0(gate.gate.q)} ลบ.ม./วิ` : "ปิด — น้ำยังไม่เข้าทางนี้") : "ไม่มีข้อมูล")}
+      ${node(100, 290, can.level, "CAN001")}${label(84, 286, "④ ระพีพัฒน์", "", "end")}<text x="84" y="301" text-anchor="end" class="m-s">${esc(bank(can))}</text>
+      ${node(260, 290, bkk13.level, "BKK013")}${label(276, 286, "④ ระพีพัฒน์")}<text x="276" y="301" class="m-s">${esc(bank(bkk13))}</text>
+      ${node(180, 380, "link", "RANGSIT", { ring: true, dash: true })}${label(180, 358, "⑤ คลองรังสิต", "", "middle")}<text x="180" y="404" text-anchor="middle" class="m-s">ไม่มีข้อมูลอัตโนมัติ</text>
+      ${node(112, 480, b01.level, "BKK001")}${node(232, 480, b15.level, "BKK015")}
+      ${label(70, 512, "⑥ คลองหกวา (ลำลูกกา)")}
+      <text x="70" y="527" class="m-s">ปลายคลอง 2: ${esc(bank(b01))}</text>
+      <text x="70" y="541" class="m-s">คลอง 8: ${esc(bank(b15))}</text>
+      ${node(232, 575, ksw.level === "info" ? "info" : "gray", "KSW", { ring: true })}${label(250, 571, "⑦ คลองสามวา", ksw.wl != null ? `ระดับ ${fmt(ksw.wl)} ม.รทก.` : "ไม่มีข้อมูลล่าสุด")}
+      ${tags}
+    </svg>`;
+    $("mapsvg").innerHTML = svg;
+    $("mapnote").innerHTML = `<div>สีของแต่ละจุดใช้เกณฑ์เดียวกับหน้าหลัก · เส้นประจางใต้ ③ = ประตูพระนารายณ์ปิด น้ำเหนือยังไม่ไหลเข้าทางนี้ (สี่เหลี่ยมสีเทา = ปิด, สีน้ำเงิน = เปิด) · ลูกศรประ = ทางระบายน้ำออก</div>
+      <div>แผนผังนี้ย่อให้เข้าใจง่าย ไม่ใช่ตำแหน่งจริงบนแผนที่ · อัปเดต ${thTime(d.generated_at)}</div>`;
+  }
+  $("mapbtn").onclick = () => {
+    if (lastData) drawMap(lastData);
+    const dlg = $("mapdlg");
+    if (typeof dlg.showModal === "function") dlg.showModal();
+    else { dlg.setAttribute("open", ""); dlg.style.position = "fixed"; dlg.style.inset = "0"; dlg.style.zIndex = "50"; dlg.style.overflow = "auto"; }
+  };
+  $("mapclose").onclick = () => { const dlg = $("mapdlg"); if (typeof dlg.close === "function") dlg.close(); else dlg.removeAttribute("open"); };
+  $("mapdlg").addEventListener("click", (e) => { if (e.target === $("mapdlg")) $("mapdlg").close(); });
 
   async function load(manual) {
     try {
