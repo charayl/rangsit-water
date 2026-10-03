@@ -98,6 +98,8 @@
   .row { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
   .row b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
   .src { font-size: .78rem; color: var(--muted); }
+  .obs { font-size: .74rem; color: var(--muted); }
+  .obs.old { color: #b45309; font-weight: 600; }
   .bar { height: 8px; border-radius: 4px; background: var(--gray-bg); position: relative; overflow: hidden; margin: 4px 0 2px; }
   .bar i { position: absolute; inset: 0 auto 0 0; background: var(--dot); border-radius: 4px; }
   .bar::after { content: ""; position: absolute; left: 90.9%; top: 0; bottom: 0; width: 2px; background: var(--ink); opacity: .35; }
@@ -201,6 +203,14 @@
   const FLAG = { green: "ธงเขียว", yellow: "ธงเหลือง", orange: "ธงส้ม", red: "ธงแดง" };
   const ARROW = { up: "↑ ขึ้น", down: "↓ ลง", steady: "→ คงที่" };
   const thTime = (iso) => iso ? new Date(iso).toLocaleString("th-TH", { timeZone: "Asia/Bangkok", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) + " น." : "—";
+  const bkkDay = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Bangkok" }).format(d);
+  const obs = (x) => {
+    if (!x || !x.time) return "";
+    const t = new Date(x.time);
+    const hm = t.toLocaleTimeString("th-TH", { timeZone: "Asia/Bangkok", hour: "2-digit", minute: "2-digit", hour12: false }) + " น.";
+    const when = bkkDay(t) === bkkDay(new Date()) ? hm : t.toLocaleDateString("th-TH", { timeZone: "Asia/Bangkok", day: "numeric", month: "short" }) + " " + hm;
+    return x.stale ? `<span class="obs old">⚠︎ ข้อมูลเก่า วัดเมื่อ ${when}</span>` : `<span class="obs">วัด ${when}</span>`;
+  };
   const ago = (iso) => {
     if (!iso) return "";
     const m = Math.round((Date.now() - new Date(iso)) / 60000);
@@ -239,16 +249,14 @@
     if (s.kind === "link") return "ไม่มีข้อมูลอัตโนมัติ · ดูกล้องของเทศบาล";
     if (s.kind === "bma") {
       const x = (s.stations || [])[0];
-      return x ? `ระดับน้ำ <b>${fmt(x.wl)} ม.รทก.</b> · ไหล ${fmt0(x.q)} ลบ.ม./วิ` : "ไม่มีข้อมูล";
+      return x ? `ระดับน้ำ <b>${fmt(x.wl)} ม.รทก.</b> · ไหล ${fmt0(x.q)} ลบ.ม./วิ<br>${obs(x)}` : "ไม่มีข้อมูล";
     }
     const parts = (s.stations || []).map(x => {
       const b = [bankTxt(x), x.trend ? trendTxt(x) : ""].filter(Boolean).join(" · ");
-      return (s.stations.length > 1 ? esc(x.label.split(" (")[0]) + ": " : "") + (b || "ไม่มีข้อมูล");
+      let line = (s.stations.length > 1 ? esc(x.label.split(" (")[0]) + ": " : "") + (b || "ไม่มีข้อมูล");
+      if (s.kind === "dam" && x.q != null) line += `<br>ไหล <b>${fmt0(x.q)}</b> ลบ.ม./วิ`;
+      return line + `<br>${obs(x)}`;
     });
-    if (s.kind === "dam") {
-      const x = s.stations[0];
-      if (x && x.q != null) parts.push(`ไหล <b>${fmt0(x.q)}</b> ลบ.ม./วิ`);
-    }
     return parts.join("<br>");
   }
 
