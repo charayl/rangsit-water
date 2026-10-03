@@ -31,6 +31,12 @@ MANUAL = ROOT / "docs" / "data" / "manual.json"
 
 THAIWATER = "https://api-v3.thaiwater.net/api/v1/thaiwater30/public"
 BMA_FLOW = "https://weather.bangkok.go.th/flow/PageMap/GetData?id=0"
+# จุดอ้างอิงของทุ่งรังสิต (ใช้พยากรณ์ฝนจุดเดียว) — ฟรีสำหรับงานไม่แสวงกำไร ต้องให้เครดิต Open-Meteo (CC BY 4.0)
+RAIN_LAT, RAIN_LON = 14.03, 100.62
+OPEN_METEO = ("https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
+              "&hourly=precipitation&past_hours=24&forecast_hours=24&timezone=Asia%2FBangkok")
+# เกณฑ์ปริมาณฝนสะสม 24 ชม. (มาตรฐานของกรมอุตุนิยมวิทยา ตามที่ผู้พัฒนาทราบ — ควรตรวจกับเอกสารทางการอีกครั้ง)
+RAIN_CLASSES = [(0.1, "ไม่มีฝน"), (10.1, "ฝนเล็กน้อย"), (35.1, "ฝนปานกลาง"), (90.1, "ฝนหนัก"), (1e9, "ฝนหนักมาก")]
 UA = "RangsitWaterWatch/1.0 (community flood-watch; polls every 15 min)"
 
 # ---------------------------------------------------------------- กติกา (ตรงกับ SYSTEM_SPEC)
@@ -161,6 +167,9 @@ class Live:
     def bma(self):
         return http_json(BMA_FLOW, tries=2)
 
+    def rain(self):
+        return http_json(OPEN_METEO.format(lat=RAIN_LAT, lon=RAIN_LON), tries=2)
+
 
 class Fixture:
     def __init__(self, path: str):
@@ -176,6 +185,9 @@ class Fixture:
 
     def bma(self):
         return self.d["bma"]
+
+    def rain(self):
+        return self.d.get("rain")
 
 
 # ---------------------------------------------------------------- สรุปสถานี
@@ -232,6 +244,36 @@ def summarize_station(src, item, cfg):
         "time": iso(t), "age_h": age_h, "stale": stale,
         "level": "gray" if (stale or not valid) else color_from_pct(pct),
         "source": "ThaiWater (สสน.)",
+    }
+
+
+def rain_class(mm: float) -> str:
+    for upper, name in RAIN_CLASSES:
+        if mm < upper:
+            return name
+    return RAIN_CLASSES[-1][1]
+
+
+def summarize_rain(src, data):
+    h = (data or {}).get("hourly") or {}
+    times, vals = h.get("time") or [], h.get("precipitation") or []
+    past, nxt = [], []
+    for ts, v in zip(times, vals):
+        t, mm = parse_th(ts.replace("T", " ")), num(v)
+        if t is None or mm is None:
+            continue
+        (past if t <= src.now else nxt).append((t, mm))
+    if not nxt and not past:
+        return None
+    past_mm = round(sum(m for _, m in past[-24:]), 1)
+    next_mm = round(sum(m for _, m in nxt[:24]), 1)
+    peak = max(nxt, key=lambda x: x[1]) if nxt else None
+    return {
+        "past24_mm": past_mm, "past24_class": rain_class(past_mm),
+        "next24_mm": next_mm, "next24_class": rain_class(next_mm),
+        "peak_mm_h": peak[1] if peak else None, "peak_time": iso(peak[0]) if peak and peak[1] >= 0.5 else None,
+        "model_run": iso(src.now), "source": "Open-Meteo (CC BY 4.0)",
+        "lat": RAIN_LAT, "lon": RAIN_LON,
     }
 
 
@@ -301,6 +343,15 @@ def build(src, previous):
         errors.append(f"กทม.: {e}")
         bma = None
 
+    rain = None
+    try:
+        rain = summarize_rain(src, src.rain())
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"ฝน: {e}")
+        rain = (previous or {}).get("rain")
+        if rain:
+            rain = {**rain, "stale": True}
+
     prev_st = {}
     for s in (previous or {}).get("stages", []):
         for x in s.get("stations") or []:
@@ -356,6 +407,7 @@ def build(src, previous):
         "summary": summary,
         "stages": stages,
         "extra": extra,
+        "rain": rain,
         "rules": {
             "colors": [
                 {"level": "green", "label": "ปกติ", "range": "≤ 70% ของความจุลำน้ำ", "source": "สสน."},
