@@ -143,7 +143,14 @@ class Live:
         self.errors: list[str] = []
 
     def thaiwater_load(self):
-        return http_json(f"{THAIWATER}/waterlevel_load")
+        # ฐานข้อมูล ThaiWater บางครั้งตอบ result:"NO" (ระบบแน่น) → รอแล้วลองใหม่
+        last = None
+        for wait in (0, 20, 45, 90):
+            time.sleep(wait)
+            last = http_json(f"{THAIWATER}/waterlevel_load")
+            if (last.get("waterlevel_data") or {}).get("result") != "NO":
+                return last
+        return last
 
     def thaiwater_graph(self, station_id: int):
         s = (self.now - timedelta(days=2)).strftime("%Y-%m-%d")
@@ -442,11 +449,14 @@ def main():
 
     result = build(src, previous)
     if any(e.startswith("ThaiWater:") for e in result["errors"]):
-        # ไม่ได้ข้อมูลหลักเลย → ไม่เขียนทับไฟล์เดิม และให้ GitHub แจ้งว่าล้มเหลว
-        print("ดึงข้อมูล ThaiWater ไม่ได้ — คงไฟล์เดิมไว้", file=sys.stderr)
+        print("ดึงข้อมูล ThaiWater ไม่ได้", file=sys.stderr)
         for e in result["errors"]:
             print("  ! ", e, file=sys.stderr)
-        sys.exit(1)
+        if previous is None:
+            sys.exit(1)  # ไม่เคยมีข้อมูลเลย → แจ้งล้มเหลว
+        # มีข้อมูลเดิม: เผยแพร่ต่อโดยสถานีที่ดึงไม่ได้ขึ้นสีเทา/ข้อมูลเก่า
+        # (ค่าประตูพระนารายณ์ที่กรอกเองยังอัปเดตตามปกติ)
+        print("  → ใช้ค่าสถานีเดิม ทำเครื่องหมายว่าเก่า", file=sys.stderr)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
 
