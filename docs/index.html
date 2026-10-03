@@ -172,6 +172,7 @@
   </dialog>
 
   <div id="extra"></div>
+  <div id="rain"></div>
 
   <section class="card">
     <h2>ความหมายของสี</h2>
@@ -325,6 +326,19 @@
       <div class="src" style="margin-bottom:8px">${esc(x.why)}</div>
       ${stationDetail(x)}
     </section>`).join("");
+
+    const r = d.rain;
+    $("rain").innerHTML = r ? `<section class="card">
+      <h2>ฝนในทุ่งรังสิต (ข้อมูลประกอบ)</h2>
+      <div class="row"><span>ฝน 24 ชม. ที่ผ่านมา</span><b>${fmt(r.past24_mm, 1)} มม. · ${esc(r.past24_class)}</b></div>
+      <div class="row"><span>พยากรณ์ 24 ชม. หน้า</span><b>${fmt(r.next24_mm, 1)} มม. · ${esc(r.next24_class)}</b></div>
+      ${r.peak_time ? `<div class="row"><span>ฝนหนักสุด</span><b>${fmt(r.peak_mm_h, 1)} มม./ชม. · ${thTime(r.peak_time)}</b></div>` : ""}
+      ${r.stale ? `<div class="src" style="color:#b45309">⚠︎ ดึงพยากรณ์ใหม่ไม่ได้ กำลังแสดงค่าเดิม</div>` : ""}
+      <div class="src" style="margin-top:8px">ฝนที่ตกในทุ่งเองทำให้น้ำท่วมขังได้ แยกจากน้ำเหนือที่ระบบนี้ติดตาม จึงไม่นำมารวมในสีหรือข้อความสรุปด้านบน ·
+        ค่าพยากรณ์จุดเดียว (รังสิต) คลาดเคลื่อนได้ · เกณฑ์ระดับฝนตามกรมอุตุนิยมวิทยา ·
+        ข้อมูล: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) ·
+        <a href="https://www.windy.com/${r.lat}/${r.lon}?rain,${r.lat},${r.lon},9" target="_blank" rel="noopener">ดูเรดาร์ฝนบน Windy ↗</a></div>
+    </section>` : "";
 
     $("legend").innerHTML = d.rules.colors.map(c => `<div>${chip(c.level, c.label)} <span>${esc(c.range)}</span> <span class="muted">${esc(c.source)}</span></div>`).join("")
       + `<div class="muted">${esc(d.rules.trend)} · แตะแต่ละด่านเพื่อดูตัวเลขและแหล่งข้อมูล</div>`;
