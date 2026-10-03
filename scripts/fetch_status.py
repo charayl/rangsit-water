@@ -119,9 +119,17 @@ def http_json(url: str, tries: int = 3):
     last = None
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+            req = urllib.request.Request(url, headers={
+                "User-Agent": UA, "Accept": "application/json, text/plain, */*",
+                "Accept-Language": "th-TH,th;q=0.9,en;q=0.8",
+                "Origin": "https://www.thaiwater.net", "Referer": "https://www.thaiwater.net/"}
+                if "thaiwater" in url else {"User-Agent": UA, "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=40) as r:
-                return json.loads(r.read().decode("utf-8"))
+                raw = r.read().decode("utf-8", errors="replace")
+            try:
+                return json.loads(raw)
+            except ValueError:
+                raise RuntimeError(f"ไม่ใช่ JSON: {raw[:200]!r}")
         except Exception as e:  # noqa: BLE001
             last = e
             time.sleep(3 * (i + 1))
@@ -268,7 +276,14 @@ def build(src, previous):
     by_code = {}
     try:
         load = src.thaiwater_load()
-        for it in load["waterlevel_data"]["data"]:
+        try:
+            items = load["waterlevel_data"]["data"]
+            if not isinstance(items, list):
+                raise TypeError("data ไม่ใช่รายการ")
+        except (TypeError, KeyError):
+            # โครงสร้างที่ได้ไม่ตรงที่คาด → แสดงตัวอย่างข้อความที่ได้รับ เพื่อใช้ตรวจสาเหตุ
+            raise RuntimeError(f"รูปแบบข้อมูลไม่ตรงที่คาด: {json.dumps(load, ensure_ascii=False)[:300]}")
+        for it in items:
             by_code[it["station"].get("tele_station_oldcode")] = it
     except Exception as e:  # noqa: BLE001
         errors.append(f"ThaiWater: {e}")
