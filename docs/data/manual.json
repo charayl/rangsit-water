@@ -2,7 +2,7 @@
   "_วิธีกรอก": "ดูค่าที่ https://water.rid.go.th/flood/plan_new/planlow.html มุมขวาล่าง 'ปตร.-ทรบ.พระนารายณ์' แล้วแก้ q (ลบ.ม./วินาที) และ date (ปี ค.ศ. YYYY-MM-DD) จากนั้นกด Commit",
   "phra_narai": {
     "q": 0,
-    "date": "2026-10-02",
+    "date": "2026-10-04",
     "note": "ผังน้ำ ชป. 06:00 น."
   }
 }
