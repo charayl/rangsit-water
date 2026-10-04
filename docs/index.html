@@ -98,6 +98,12 @@
   .row { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
   .row b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
   .src { font-size: .78rem; color: var(--muted); }
+  .rainbars { margin: 10px 0 2px; }
+  .rainbars svg { width: 100%; height: auto; display: block; }
+  .rainbars .bar { fill: var(--info); }
+  .rainbars .bar.zero { fill: var(--rail); }
+  .rainbars .ax { fill: var(--muted); font-size: 10px; font-family: inherit; }
+  .rainbars .gl { stroke: var(--line); stroke-width: 1; }
   .obs { font-size: .74rem; color: var(--muted); }
   .obs.old { color: #b45309; font-weight: 600; }
   .bar { height: 8px; border-radius: 4px; background: var(--gray-bg); position: relative; overflow: hidden; margin: 4px 0 2px; }
@@ -220,6 +226,27 @@
     if (m < 2880) return `${Math.round(m / 60)} ชม.ที่แล้ว`;
     return `${Math.round(m / 1440)} วันที่แล้ว`;
   };
+  // แท่งฝนรายชั่วโมง 24 ชม. ข้างหน้า (สเกลต่ำสุด 2 มม./ชม. เพื่อไม่ให้ฝนเล็กน้อยดูเกินจริง)
+  function rainBars(hourly) {
+    if (!hourly || !hourly.length) return "";
+    const W = 340, H = 92, top = 6, bot = 18, left = 4, right = 4;
+    const n = hourly.length, bw = (W - left - right) / n;
+    const vmax = Math.max(2, ...hourly.map(h => h.mm));
+    const ch = H - top - bot;
+    const hh = (iso) => new Date(iso).toLocaleTimeString("th-TH", { timeZone: "Asia/Bangkok", hour: "2-digit", minute: "2-digit", hour12: false });
+    const bars = hourly.map((h, i) => {
+      if (!(h.mm > 0)) return "";   // ไม่มีฝน: ไม่วาดแท่ง เหลือเส้นฐานอย่างเดียว
+      const bh = Math.max(2, h.mm / vmax * ch);
+      const x = left + i * bw + 1.5, y = top + ch - bh;
+      return `<rect class="bar${h.mm > 0 ? "" : " zero"}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw - 3).toFixed(1)}" height="${bh.toFixed(1)}" rx="1.5"><title>${hh(h.t)} น. · ${fmt(h.mm, 1)} มม.</title></rect>`;
+    }).join("");
+    const labels = hourly.map((h, i) => i % 6 === 0
+      ? `<text class="ax" x="${(i === 0 ? left : left + i * bw + bw / 2).toFixed(1)}" y="${H - 4}" text-anchor="${i === 0 ? "start" : "middle"}">${hh(h.t)}</text>` : "").join("");
+    const total = hourly.reduce((a, h) => a + h.mm, 0);
+    return `<div class="rainbars"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="กราฟแท่งฝนรายชั่วโมง 24 ชั่วโมงข้างหน้า รวม ${fmt(total, 1)} มม.">
+      <line class="gl" x1="${left}" x2="${W - right}" y1="${top + ch}" y2="${top + ch}"/>${bars}${labels}</svg>
+      <div class="src">มม./ชม. · แท่งสูงสุดของกราฟ = ${fmt(vmax, 1)} มม./ชม.</div></div>`;
+  }
   const chip = (lv, text) => `<span class="chip lv-${lv}">${esc(text ?? LABEL[lv])}</span>`;
   const trendTxt = (x) => x.trend ? `${ARROW[x.trend]}${x.trend_m != null && x.trend !== "steady" ? " " + fmt(Math.abs(x.trend_m)) + " ม./24 ชม." : ""}` : "";
   const bankTxt = (x) => x.to_bank == null ? "" : x.to_bank < 0 ? `เกินตลิ่ง <b>${fmt(-x.to_bank)} ม.</b>` : `ห่างตลิ่ง <b>${fmt(x.to_bank)} ม.</b>`;
@@ -333,6 +360,7 @@
       <div class="row"><span>ฝน 24 ชม. ที่ผ่านมา</span><b>${fmt(r.past24_mm, 1)} มม. · ${esc(r.past24_class)}</b></div>
       <div class="row"><span>พยากรณ์ 24 ชม. หน้า</span><b>${fmt(r.next24_mm, 1)} มม. · ${esc(r.next24_class)}</b></div>
       ${r.peak_time ? `<div class="row"><span>ฝนหนักสุด</span><b>${fmt(r.peak_mm_h, 1)} มม./ชม. · ${thTime(r.peak_time)}</b></div>` : ""}
+      ${rainBars(r.hourly)}
       ${r.stale ? `<div class="src" style="color:#b45309">⚠︎ ดึงพยากรณ์ใหม่ไม่ได้ กำลังแสดงค่าเดิม</div>` : ""}
       <div class="src" style="margin-top:8px">ฝนที่ตกในทุ่งเองทำให้น้ำท่วมขังได้ แยกจากน้ำเหนือที่ระบบนี้ติดตาม จึงไม่นำมารวมในสีหรือข้อความสรุปด้านบน ·
         ค่าพยากรณ์จุดเดียว (รังสิต) คลาดเคลื่อนได้ · เกณฑ์ระดับฝนตามกรมอุตุนิยมวิทยา ·
