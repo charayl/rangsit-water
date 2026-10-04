@@ -272,6 +272,7 @@ def summarize_rain(src, data):
         "past24_mm": past_mm, "past24_class": rain_class(past_mm),
         "next24_mm": next_mm, "next24_class": rain_class(next_mm),
         "peak_mm_h": peak[1] if peak else None, "peak_time": iso(peak[0]) if peak and peak[1] >= 0.5 else None,
+        "hourly": [{"t": iso(t), "mm": round(m, 1)} for t, m in nxt[:24]],  # ฝนรายชั่วโมงล่วงหน้า (มม./ชม.)
         "model_run": iso(src.now), "source": "Open-Meteo (CC BY 4.0)",
         "lat": RAIN_LAT, "lon": RAIN_LON,
     }
