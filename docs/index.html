@@ -100,8 +100,8 @@
   .src { font-size: .78rem; color: var(--muted); }
   .rainbars { margin: 10px 0 2px; }
   .rainbars svg { width: 100%; height: auto; display: block; }
-  .rainbars .bar { fill: var(--info); }
-  .rainbars .bar.zero { fill: var(--rail); }
+  .rainbars .rb { fill: var(--info); }
+  .rainbars .val { fill: var(--ink); font-size: 9.5px; font-family: inherit; font-weight: 600; }
   .rainbars .ax { fill: var(--muted); font-size: 10px; font-family: inherit; }
   .rainbars .gl { stroke: var(--line); stroke-width: 1; }
   .obs { font-size: .74rem; color: var(--muted); }
@@ -226,26 +226,32 @@
     if (m < 2880) return `${Math.round(m / 60)} ชม.ที่แล้ว`;
     return `${Math.round(m / 1440)} วันที่แล้ว`;
   };
-  // แท่งฝนรายชั่วโมง 24 ชม. ข้างหน้า (สเกลต่ำสุด 2 มม./ชม. เพื่อไม่ให้ฝนเล็กน้อยดูเกินจริง)
+  // แท่งฝนรายชั่วโมง 24 ชม. ข้างหน้า: ความสูงแท่ง = ปริมาณฝนจริง (สเกลคงที่ 2/5/10/20/50 มม./ชม.)
   function rainBars(hourly) {
     if (!hourly || !hourly.length) return "";
-    const W = 340, H = 92, top = 6, bot = 18, left = 4, right = 4;
+    const W = 340, H = 150, top = 14, bot = 20, left = 26, right = 4;
     const n = hourly.length, bw = (W - left - right) / n;
-    const vmax = Math.max(2, ...hourly.map(h => h.mm));
+    const peak = Math.max(...hourly.map(h => h.mm));
+    const vmax = [2, 5, 10, 20, 50, 100].find(v => peak <= v) || Math.ceil(peak);
     const ch = H - top - bot;
+    const yOf = (v) => top + ch - (v / vmax) * ch;
     const hh = (iso) => new Date(iso).toLocaleTimeString("th-TH", { timeZone: "Asia/Bangkok", hour: "2-digit", minute: "2-digit", hour12: false });
+    const grid = [0, vmax / 2, vmax].map(v =>
+      `<line class="gl" x1="${left}" x2="${W - right}" y1="${yOf(v).toFixed(1)}" y2="${yOf(v).toFixed(1)}"/>` +
+      `<text class="ax" x="${left - 4}" y="${(yOf(v) + 3.5).toFixed(1)}" text-anchor="end">${fmt(v, v % 1 ? 1 : 0)}</text>`).join("");
     const bars = hourly.map((h, i) => {
-      if (!(h.mm > 0)) return "";   // ไม่มีฝน: ไม่วาดแท่ง เหลือเส้นฐานอย่างเดียว
-      const bh = Math.max(2, h.mm / vmax * ch);
-      const x = left + i * bw + 1.5, y = top + ch - bh;
-      return `<rect class="bar${h.mm > 0 ? "" : " zero"}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw - 3).toFixed(1)}" height="${bh.toFixed(1)}" rx="1.5"><title>${hh(h.t)} น. · ${fmt(h.mm, 1)} มม.</title></rect>`;
+      if (!(h.mm > 0)) return "";
+      const bh = Math.max(1, (h.mm / vmax) * ch);
+      const x = left + i * bw + 1, y = top + ch - bh;
+      const val = h.mm >= 0.5 ? `<text class="val" x="${(x + (bw - 2) / 2).toFixed(1)}" y="${(y - 3).toFixed(1)}" text-anchor="middle">${fmt(h.mm, 1)}</text>` : "";
+      return `<rect class="rb" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${bh.toFixed(1)}"><title>${hh(h.t)} น. · ${fmt(h.mm, 1)} มม.</title></rect>${val}`;
     }).join("");
     const labels = hourly.map((h, i) => i % 6 === 0
-      ? `<text class="ax" x="${(i === 0 ? left : left + i * bw + bw / 2).toFixed(1)}" y="${H - 4}" text-anchor="${i === 0 ? "start" : "middle"}">${hh(h.t)}</text>` : "").join("");
+      ? `<text class="ax" x="${(left + i * bw + (i === 0 ? 0 : bw / 2)).toFixed(1)}" y="${H - 5}" text-anchor="${i === 0 ? "start" : "middle"}">${hh(h.t)}</text>` : "").join("");
     const total = hourly.reduce((a, h) => a + h.mm, 0);
-    return `<div class="rainbars"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="กราฟแท่งฝนรายชั่วโมง 24 ชั่วโมงข้างหน้า รวม ${fmt(total, 1)} มม.">
-      <line class="gl" x1="${left}" x2="${W - right}" y1="${top + ch}" y2="${top + ch}"/>${bars}${labels}</svg>
-      <div class="src">มม./ชม. · แท่งสูงสุดของกราฟ = ${fmt(vmax, 1)} มม./ชม.</div></div>`;
+    return `<div class="rainbars"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="กราฟแท่งฝนรายชั่วโมง 24 ชั่วโมงข้างหน้า รวม ${fmt(total, 1)} มม. สูงสุด ${fmt(peak, 1)} มม./ชม.">
+      ${grid}${bars}${labels}</svg>
+      <div class="src">ฝนรายชั่วโมง (มม./ชม.) · ความสูงแท่งเทียบกับแกนซ้าย</div></div>`;
   }
   const chip = (lv, text) => `<span class="chip lv-${lv}">${esc(text ?? LABEL[lv])}</span>`;
   const trendTxt = (x) => x.trend ? `${ARROW[x.trend]}${x.trend_m != null && x.trend !== "steady" ? " " + fmt(Math.abs(x.trend_m)) + " ม./24 ชม." : ""}` : "";
