@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-04T09:36+07:00",
+ "generated_at": "2026-10-04T09:39+07:00",
  "position": 2,
  "summary": {
   "level": "orange",
@@ -34,7 +34,7 @@
      "trend": "up",
      "trend_m": 0.46,
      "time": "2026-10-04T08:00+07:00",
-     "age_h": 1.6,
+     "age_h": 1.7,
      "stale": false,
      "level": "green",
      "source": "ThaiWater (สสน.)"
@@ -66,7 +66,7 @@
      "trend": "up",
      "trend_m": 0.3,
      "time": "2026-10-04T08:00+07:00",
-     "age_h": 1.6,
+     "age_h": 1.7,
      "stale": false,
      "level": "red",
      "source": "ThaiWater (สสน.)"
@@ -216,7 +216,7 @@
      "trend": null,
      "trend_m": null,
      "time": "2026-10-02T15:40+07:00",
-     "age_h": 41.9,
+     "age_h": 42.0,
      "stale": true,
      "level": "gray",
      "source": "ThaiWater (สสน.)"
@@ -276,7 +276,7 @@
    "trend": "steady",
    "trend_m": 0.0,
    "time": "2026-10-04T08:00+07:00",
-   "age_h": 1.6,
+   "age_h": 1.7,
    "stale": false,
    "level": "orange",
    "source": "ThaiWater (สสน.)",
@@ -384,7 +384,7 @@
     "mm": 0.0
    }
   ],
-  "model_run": "2026-10-04T09:36+07:00",
+  "model_run": "2026-10-04T09:39+07:00",
   "source": "Open-Meteo (CC BY 4.0)",
   "lat": 14.03,
   "lon": 100.62
