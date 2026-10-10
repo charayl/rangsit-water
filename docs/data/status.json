@@ -1,12 +1,11 @@
 {
- "generated_at": "2026-10-10T21:57+07:00",
- "position": 4,
+ "generated_at": "2026-10-11T02:04+07:00",
+ "position": 3,
  "summary": {
-  "level": "yellow",
-  "status_line": "คลองระพีพัฒน์ แยกใต้ น้ำมาก (ห่างตลิ่ง 0.68 ม.)",
+  "level": "gray",
+  "status_line": "ยังไม่มีข้อมูลล่าสุดของคลองในทุ่งรังสิต",
   "water_lines": [
-   "กรมชลฯ กำลังส่งน้ำเข้าคลองระพีพัฒน์ 52 ลบ.ม./วินาที · ระพีพัฒน์มักขึ้นตามภายในราว 1–3 วัน",
-   "ระดับน้ำคลองระพีพัฒน์ (ขอบทุ่งรังสิต) กำลังสูงขึ้น"
+   "กรมชลฯ กำลังส่งน้ำเข้าคลองระพีพัฒน์ 52 ลบ.ม./วินาที · ระพีพัฒน์มักขึ้นตามภายในราว 1–3 วัน"
   ],
   "notes": []
  },
@@ -34,12 +33,12 @@
      "trend_m": -0.45,
      "time": "2026-10-10T21:00+07:00",
      "age_h": 1.0,
-     "stale": false,
-     "level": "green",
+     "stale": true,
+     "level": "gray",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "green",
+   "level": "gray",
    "rising": false,
    "here": false
   },
@@ -66,12 +65,12 @@
      "trend_m": -0.23,
      "time": "2026-10-10T21:00+07:00",
      "age_h": 1.0,
-     "stale": false,
-     "level": "red",
+     "stale": true,
+     "level": "gray",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "red",
+   "level": "gray",
    "rising": false,
    "here": false
   },
@@ -86,14 +85,14 @@
    "gate": {
     "q": 52.0,
     "date": "2026-10-10",
-    "age_days": 0,
+    "age_days": 1,
     "stale": false,
     "open": true,
     "note": "ผังน้ำ ชป. 06:00 น."
    },
    "level": "info",
    "rising": true,
-   "here": false
+   "here": true
   },
   {
    "n": 4,
@@ -117,8 +116,8 @@
      "trend_m": 0.44,
      "time": "2026-10-10T21:40+07:00",
      "age_h": 0.3,
-     "stale": false,
-     "level": "yellow",
+     "stale": true,
+     "level": "gray",
      "source": "ThaiWater (สสน.)"
     },
     {
@@ -136,14 +135,14 @@
      "trend_m": -0.08,
      "time": "2026-10-10T21:40+07:00",
      "age_h": 0.3,
-     "stale": false,
-     "level": "yellow",
+     "stale": true,
+     "level": "gray",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "yellow",
-   "rising": true,
-   "here": true
+   "level": "gray",
+   "rising": false,
+   "here": false
   },
   {
    "n": 5,
@@ -197,8 +196,8 @@
      "trend_m": -0.31,
      "time": "2026-10-10T21:40+07:00",
      "age_h": 0.3,
-     "stale": false,
-     "level": "yellow",
+     "stale": true,
+     "level": "gray",
      "source": "ThaiWater (สสน.)"
     },
     {
@@ -221,7 +220,7 @@
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "yellow",
+   "level": "gray",
    "rising": false,
    "here": false
   },
@@ -264,67 +263,34 @@
   {
    "code": "C.13",
    "label": "ท้ายเขื่อนเจ้าพระยา (แม่น้ำเจ้าพระยา)",
-   "official_name": "ท้ายเขื่อนเจ้าพระยา",
-   "wl": 15.1,
-   "bank": 16.34,
-   "to_bank": 1.24,
-   "pct": 91.3,
-   "q": 2150.0,
-   "qmax": 2720.0,
-   "q_pct": 79,
-   "trend": "down",
-   "trend_m": -0.14,
-   "time": "2026-10-10T21:00+07:00",
-   "age_h": 1.0,
-   "stale": false,
-   "level": "orange",
-   "source": "ThaiWater (สสน.)",
+   "level": "gray",
+   "stale": true,
    "why": "ถ้าแม่น้ำเจ้าพระยาสูง น้ำในคลองรังสิตจะระบายออกได้ช้า"
   }
  ],
  "rain": {
-  "past24_mm": 5.4,
-  "past24_class": "ฝนเล็กน้อย",
-  "next24_mm": 25.3,
-  "next24_class": "ฝนปานกลาง",
-  "peak_mm_h": 5.6,
-  "peak_time": "2026-10-10T23:00+07:00",
+  "past24_mm": 13.8,
+  "past24_class": "ฝนปานกลาง",
+  "next24_mm": 7.9,
+  "next24_class": "ฝนเล็กน้อย",
+  "peak_mm_h": 2.5,
+  "peak_time": "2026-10-11T19:00+07:00",
   "hourly": [
    {
-    "t": "2026-10-10T22:00+07:00",
-    "mm": 1.4
-   },
-   {
-    "t": "2026-10-10T23:00+07:00",
-    "mm": 5.6
-   },
-   {
-    "t": "2026-10-11T00:00+07:00",
-    "mm": 0.8
-   },
-   {
-    "t": "2026-10-11T01:00+07:00",
-    "mm": 0.4
-   },
-   {
-    "t": "2026-10-11T02:00+07:00",
-    "mm": 0.4
-   },
-   {
     "t": "2026-10-11T03:00+07:00",
-    "mm": 0.8
+    "mm": 0.6
    },
    {
     "t": "2026-10-11T04:00+07:00",
-    "mm": 2.1
+    "mm": 0.5
    },
    {
     "t": "2026-10-11T05:00+07:00",
-    "mm": 0.4
+    "mm": 0.3
    },
    {
     "t": "2026-10-11T06:00+07:00",
-    "mm": 0.3
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T07:00+07:00",
@@ -336,7 +302,7 @@
    },
    {
     "t": "2026-10-11T09:00+07:00",
-    "mm": 0.5
+    "mm": 0.0
    },
    {
     "t": "2026-10-11T10:00+07:00",
@@ -344,46 +310,66 @@
    },
    {
     "t": "2026-10-11T11:00+07:00",
-    "mm": 0.2
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T12:00+07:00",
-    "mm": 0.4
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T13:00+07:00",
-    "mm": 0.2
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T14:00+07:00",
-    "mm": 1.0
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T15:00+07:00",
-    "mm": 1.6
+    "mm": 1.2
    },
    {
     "t": "2026-10-11T16:00+07:00",
-    "mm": 3.0
+    "mm": 0.5
    },
    {
     "t": "2026-10-11T17:00+07:00",
-    "mm": 4.0
+    "mm": 0.4
    },
    {
     "t": "2026-10-11T18:00+07:00",
-    "mm": 0.7
+    "mm": 0.5
    },
    {
     "t": "2026-10-11T19:00+07:00",
-    "mm": 0.8
+    "mm": 2.5
    },
    {
     "t": "2026-10-11T20:00+07:00",
-    "mm": 0.4
+    "mm": 0.6
+   },
+   {
+    "t": "2026-10-11T21:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-11T22:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-11T23:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-12T00:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-12T01:00+07:00",
+    "mm": 0.0
    }
   ],
-  "model_run": "2026-10-10T21:57+07:00",
+  "model_run": "2026-10-11T02:04+07:00",
   "source": "Open-Meteo (CC BY 4.0)",
   "lat": 14.03,
   "lon": 100.62
@@ -438,6 +424,7 @@
   }
  ],
  "errors": [
+  "ThaiWater: รูปแบบข้อมูลไม่ตรงที่คาด: {\"waterlevel_data\": {\"result\": \"NO\", \"data\": {\"Severity\": \"FATAL\", \"Code\": \"53300\", \"Message\": \"remaining connection slots are reserved for non-replication superuser connections\", \"Detail\": \"\", \"Hint\": \"\", \"Position\": \"\", \"InternalPosition\": \"\", \"InternalQuery\": \"\", \"Where\": \"\", \"Schema\": \"\", \"Table",
   "กทม.: https://weather.bangkok.go.th/flow/PageMap/GetData?id=0 → HTTP Error 403: Forbidden"
  ]
 }
