@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-10-11T05:27+07:00",
+ "generated_at": "2026-10-11T08:05+07:00",
  "position": 3,
  "summary": {
-  "level": "gray",
-  "status_line": "ยังไม่มีข้อมูลล่าสุดของคลองในทุ่งรังสิต",
+  "level": "yellow",
+  "status_line": "คลองระพีพัฒน์ แยกใต้ น้ำมาก (ห่างตลิ่ง 0.72 ม.)",
   "water_lines": [
    "กรมชลฯ กำลังส่งน้ำเข้าคลองระพีพัฒน์ 52 ลบ.ม./วินาที · ระพีพัฒน์มักขึ้นตามภายในราว 1–3 วัน"
   ],
@@ -22,23 +22,23 @@
      "code": "S.28",
      "label": "ท้ายเขื่อนป่าสักชลสิทธิ์",
      "official_name": "ท้ายเขื่อนป่าสักชลสิทธิ์",
-     "wl": 24.11,
+     "wl": 23.95,
      "bank": 31.46,
-     "to_bank": 7.35,
-     "pct": 55.2,
-     "q": 356.0,
+     "to_bank": 7.51,
+     "pct": 54.2,
+     "q": 346.0,
      "qmax": 1184.0,
-     "q_pct": 30,
+     "q_pct": 29,
      "trend": "down",
-     "trend_m": -0.45,
-     "time": "2026-10-10T21:00+07:00",
-     "age_h": 1.0,
-     "stale": true,
-     "level": "gray",
+     "trend_m": -0.46,
+     "time": "2026-10-11T07:00+07:00",
+     "age_h": 1.1,
+     "stale": false,
+     "level": "green",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "gray",
+   "level": "green",
    "rising": false,
    "here": false
   },
@@ -54,23 +54,23 @@
      "code": "S.26",
      "label": "ท้ายเขื่อนพระรามหก",
      "official_name": "ท้ายเขื่อนพระรามหก",
-     "wl": 7.37,
+     "wl": 7.26,
      "bank": 7.2,
-     "to_bank": -0.17,
-     "pct": 101.4,
-     "q": 655.0,
+     "to_bank": -0.06,
+     "pct": 100.5,
+     "q": 641.0,
      "qmax": 633.0,
-     "q_pct": 103,
+     "q_pct": 101,
      "trend": "down",
-     "trend_m": -0.23,
-     "time": "2026-10-10T21:00+07:00",
-     "age_h": 1.0,
-     "stale": true,
-     "level": "gray",
+     "trend_m": -0.26,
+     "time": "2026-10-11T07:00+07:00",
+     "age_h": 1.1,
+     "stale": false,
+     "level": "red",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "gray",
+   "level": "red",
    "rising": false,
    "here": false
   },
@@ -105,42 +105,42 @@
      "code": "CAN001",
      "label": "แยกตก (คลองหลวง)",
      "official_name": "คลองระพีพัฒน์แยกตก",
-     "wl": 3.81,
+     "wl": 3.22,
      "bank": 4.56,
-     "to_bank": 0.75,
-     "pct": 85.6,
+     "to_bank": 1.34,
+     "pct": 74.2,
      "q": null,
      "qmax": null,
      "q_pct": null,
-     "trend": "up",
-     "trend_m": 0.44,
-     "time": "2026-10-10T21:40+07:00",
+     "trend": "down",
+     "trend_m": -0.54,
+     "time": "2026-10-11T07:50+07:00",
      "age_h": 0.3,
-     "stale": true,
-     "level": "gray",
+     "stale": false,
+     "level": "yellow",
      "source": "ThaiWater (สสน.)"
     },
     {
      "code": "BKK013",
      "label": "แยกใต้ (หนองเสือ)",
      "official_name": "คลองระพีพัฒน์แยกใต้ หนองเสือ",
-     "wl": 3.28,
+     "wl": 3.24,
      "bank": 3.96,
-     "to_bank": 0.68,
-     "pct": 85.0,
+     "to_bank": 0.72,
+     "pct": 84.1,
      "q": null,
      "qmax": null,
      "q_pct": null,
      "trend": "steady",
-     "trend_m": -0.08,
-     "time": "2026-10-10T21:40+07:00",
+     "trend_m": -0.09,
+     "time": "2026-10-11T07:50+07:00",
      "age_h": 0.3,
-     "stale": true,
-     "level": "gray",
+     "stale": false,
+     "level": "yellow",
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "gray",
+   "level": "yellow",
    "rising": false,
    "here": false
   },
@@ -185,19 +185,19 @@
      "code": "BKK015",
      "label": "คลอง 8 ลำลูกกา",
      "official_name": "คลองหกวา ลำลูกกา คลอง8",
-     "wl": 1.58,
+     "wl": 1.56,
      "bank": 2.71,
-     "to_bank": 1.13,
-     "pct": 78.2,
+     "to_bank": 1.15,
+     "pct": 77.8,
      "q": null,
      "qmax": null,
      "q_pct": null,
      "trend": "down",
-     "trend_m": -0.31,
-     "time": "2026-10-10T21:40+07:00",
+     "trend_m": -0.38,
+     "time": "2026-10-11T07:50+07:00",
      "age_h": 0.3,
-     "stale": true,
-     "level": "gray",
+     "stale": false,
+     "level": "yellow",
      "source": "ThaiWater (สสน.)"
     },
     {
@@ -220,7 +220,7 @@
      "source": "ThaiWater (สสน.)"
     }
    ],
-   "level": "gray",
+   "level": "yellow",
    "rising": false,
    "here": false
   },
@@ -263,34 +263,35 @@
   {
    "code": "C.13",
    "label": "ท้ายเขื่อนเจ้าพระยา (แม่น้ำเจ้าพระยา)",
-   "level": "gray",
-   "stale": true,
+   "official_name": "ท้ายเขื่อนเจ้าพระยา",
+   "wl": 14.98,
+   "bank": 16.34,
+   "to_bank": 1.36,
+   "pct": 90.5,
+   "q": 2100.0,
+   "qmax": 2720.0,
+   "q_pct": 77,
+   "trend": "down",
+   "trend_m": -0.24,
+   "time": "2026-10-11T07:00+07:00",
+   "age_h": 1.1,
+   "stale": false,
+   "level": "orange",
+   "source": "ThaiWater (สสน.)",
    "why": "ถ้าแม่น้ำเจ้าพระยาสูง น้ำในคลองรังสิตจะระบายออกได้ช้า"
   }
  ],
  "rain": {
-  "past24_mm": 15.2,
+  "past24_mm": 25.5,
   "past24_class": "ฝนปานกลาง",
-  "next24_mm": 6.5,
-  "next24_class": "ฝนเล็กน้อย",
-  "peak_mm_h": 2.5,
-  "peak_time": "2026-10-11T19:00+07:00",
+  "next24_mm": 16.8,
+  "next24_class": "ฝนปานกลาง",
+  "peak_mm_h": 5.6,
+  "peak_time": "2026-10-11T18:00+07:00",
   "hourly": [
    {
-    "t": "2026-10-11T06:00+07:00",
-    "mm": 0.1
-   },
-   {
-    "t": "2026-10-11T07:00+07:00",
-    "mm": 0.1
-   },
-   {
-    "t": "2026-10-11T08:00+07:00",
-    "mm": 0.1
-   },
-   {
     "t": "2026-10-11T09:00+07:00",
-    "mm": 0.0
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T10:00+07:00",
@@ -298,51 +299,51 @@
    },
    {
     "t": "2026-10-11T11:00+07:00",
-    "mm": 0.1
+    "mm": 0.2
    },
    {
     "t": "2026-10-11T12:00+07:00",
-    "mm": 0.1
+    "mm": 0.2
    },
    {
     "t": "2026-10-11T13:00+07:00",
-    "mm": 0.1
+    "mm": 0.2
    },
    {
     "t": "2026-10-11T14:00+07:00",
-    "mm": 0.1
+    "mm": 3.1
    },
    {
     "t": "2026-10-11T15:00+07:00",
-    "mm": 1.2
+    "mm": 1.8
    },
    {
     "t": "2026-10-11T16:00+07:00",
-    "mm": 0.5
+    "mm": 0.2
    },
    {
     "t": "2026-10-11T17:00+07:00",
-    "mm": 0.4
+    "mm": 0.1
    },
    {
     "t": "2026-10-11T18:00+07:00",
-    "mm": 0.5
+    "mm": 5.6
    },
    {
     "t": "2026-10-11T19:00+07:00",
-    "mm": 2.5
+    "mm": 2.4
    },
    {
     "t": "2026-10-11T20:00+07:00",
-    "mm": 0.6
+    "mm": 1.2
    },
    {
     "t": "2026-10-11T21:00+07:00",
-    "mm": 0.0
+    "mm": 1.2
    },
    {
     "t": "2026-10-11T22:00+07:00",
-    "mm": 0.0
+    "mm": 0.4
    },
    {
     "t": "2026-10-11T23:00+07:00",
@@ -367,9 +368,21 @@
    {
     "t": "2026-10-12T04:00+07:00",
     "mm": 0.0
+   },
+   {
+    "t": "2026-10-12T05:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-12T06:00+07:00",
+    "mm": 0.0
+   },
+   {
+    "t": "2026-10-12T07:00+07:00",
+    "mm": 0.0
    }
   ],
-  "model_run": "2026-10-11T05:27+07:00",
+  "model_run": "2026-10-11T08:05+07:00",
   "source": "Open-Meteo (CC BY 4.0)",
   "lat": 14.03,
   "lon": 100.62
@@ -424,7 +437,6 @@
   }
  ],
  "errors": [
-  "ThaiWater: รูปแบบข้อมูลไม่ตรงที่คาด: {\"waterlevel_data\": {\"result\": \"NO\", \"data\": {\"Severity\": \"FATAL\", \"Code\": \"53300\", \"Message\": \"remaining connection slots are reserved for non-replication superuser connections\", \"Detail\": \"\", \"Hint\": \"\", \"Position\": \"\", \"InternalPosition\": \"\", \"InternalQuery\": \"\", \"Where\": \"\", \"Schema\": \"\", \"Table",
   "กทม.: https://weather.bangkok.go.th/flow/PageMap/GetData?id=0 → HTTP Error 403: Forbidden"
  ]
 }
